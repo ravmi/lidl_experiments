@@ -30,7 +30,8 @@ def random_search(
         parameters_ranges,
         model_name,
         dataset_name,
-        num_iter=20):
+        num_iter=20,
+        seed=0):
     """
     Args:
         model (object)
@@ -52,7 +53,7 @@ def random_search(
         p, q = np.sort(p), np.sort(q)
         return abs(p-q).mean()
 
-    np.random.seed(0)
+    np.random.seed(seed)
     run = init_run()
     run['dataset_name'] = dataset_name
     run['model_name'] = model_name

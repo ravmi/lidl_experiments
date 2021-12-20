@@ -1,10 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import skdim
-import time
 import datasets
-import traceback
-import logging
 from utils import random_search
 
 
