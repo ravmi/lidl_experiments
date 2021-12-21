@@ -31,7 +31,8 @@ def random_search(
         model_name,
         dataset_name,
         num_iter=20,
-        seed=0):
+        seed=0,
+        plot=True):
     """
     Args:
         model (object)
@@ -78,13 +79,14 @@ def random_search(
 
             m1, m2 = mse(ldims, ground_truth), mae(ldims, ground_truth)
 
-            fig, axes = plt.subplots(1, 2)
-            fig.set_size_inches(15, 6)
-            axes[0].hist(ldims, bins=100, range=(ldims.min()-1, ldims.max()+1))
-            axes[0].set_title('prediction')
-            axes[1].hist(ground_truth, bins=100, range=(ground_truth.min()-1, ground_truth.max()+1))
-            axes[1].set_title('ground truth')
-            run['histogram'].log(fig)
+            if plot:
+                fig, axes = plt.subplots(1, 2)
+                fig.set_size_inches(15, 6)
+                axes[0].hist(ldims, bins=100, range=(ldims.min()-1, ldims.max()+1))
+                axes[0].set_title('prediction')
+                axes[1].hist(ground_truth, bins=100, range=(ground_truth.min()-1, ground_truth.max()+1))
+                axes[1].set_title('ground truth')
+                run['histogram'].log(fig)
             run['mse'].log(m1)
             run['mae'].log(m2)
             run['gdim'].log(gdim)
