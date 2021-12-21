@@ -65,7 +65,7 @@ def random_search(
             params = dict()
             if i != 0:
                 for pname, vals in parameters_ranges.items():
-                    pval = np.random.choice(vals)
+                    pval = vals[np.random.randint(0, len(vals))]
                     params[pname] = pval
 
             model = model_fun(**params)
@@ -75,17 +75,20 @@ def random_search(
             end_time = time.time()
 
 
+
             m1, m2 = mse(ldims, ground_truth), mae(ldims, ground_truth)
 
             fig, axes = plt.subplots(1, 2)
             fig.set_size_inches(15, 6)
-            axes[0].hist(ldims, bins=100)
+            axes[0].hist(ldims, bins=100, range=(ldims.min()-1, ldims.max()+1))
             axes[0].set_title('prediction')
-            axes[1].hist(ground_truth, bins=100)
+            axes[1].hist(ground_truth, bins=100, range=(ground_truth.min()-1, ground_truth.max()+1))
             axes[1].set_title('ground truth')
             run['histogram'].log(fig)
             run['mse'].log(m1)
             run['mae'].log(m2)
+            run['gdim'].log(gdim)
+            run['ldim'].log(ldims.mean())
             run['params'].log(params)
             run['time'].log(end_time - start_time)
         except Exception as e:
