@@ -65,10 +65,12 @@ def random_search(
         try:
             start_time = time.time()
             params = dict()
-            if i != 0:
-                for pname, vals in parameters_ranges.items():
-                    pval = vals[np.random.randint(0, len(vals))]
-                    params[pname] = pval
+            #if i != 0:
+            for pname, vals in parameters_ranges.items():
+                pval = vals[np.random.randint(0, len(vals))]
+                params[pname] = pval
+
+
 
             model = model_fun(**params)
             ldims = model.fit_transform_pw(data)
@@ -76,9 +78,18 @@ def random_search(
             gdim = model.fit_transform(data)
             end_time = time.time()
 
-
+            '''
+            for j in range(len(ldims)):
+                run[f'ldim_{i}'].log(ldims[i])
+                run[f'gt_{i}'].log(ground_truth[i])
+            '''
+            err_count = np.sum(~np.isfinite(a))
+            if err_count > 0:
+                run['err_count'].log(err_count)
+                continue
 
             m1, m2 = mse(ldims, ground_truth), mae(ldims, ground_truth)
+
 
             if plot:
                 fig, axes = plt.subplots(1, 2)
